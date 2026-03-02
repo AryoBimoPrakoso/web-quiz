@@ -1,8 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -15,6 +17,7 @@ export default function LoginPage() {
     const result = await res.json();
     if (res.ok) {
       alert("Login sukses!");
+      router.replace('/quiz')
       console.log("Data user : ", result.user);
     } else {
       alert("Gagal : " + result.error);

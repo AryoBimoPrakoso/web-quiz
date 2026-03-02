@@ -1,7 +1,7 @@
 import dbConnect from "@/lib/db";
 import User from "@/models/User";
 import bcrypt from "bcrypt";
-import { error } from "console";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -18,10 +18,28 @@ export async function POST(req) {
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (isMatch) {
-    return NextResponse.json({
-      message: "Login berhasil",
+    // Payload token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" },
+    );
+
+    // Response dan set Cookie
+    const response = NextResponse.json({
+      message: "Login Berhasil",
       user: { email: user.email },
     });
+
+    // tempelkan cookie ke response
+    response.cookies.set("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+    });
+
+    return response;
   } else {
     return NextResponse.json({ error: "Password salah" }, { status: 401 });
   }

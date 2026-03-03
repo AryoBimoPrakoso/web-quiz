@@ -7,13 +7,13 @@ export default function Home() {
       <div className="flex gap-4">
         <Link
           href="/quiz"
-          className="text-2xl border rounded-xl px-2 py-1 hover:scale-105 duration-300"
+          className="text-xl border rounded-xl px-4 py-2 hover:scale-105 duration-300"
         >
           start
         </Link>
         <Link
           href="/login"
-          className="text-2xl bg-foreground text-background rounded-xl px-2 py-1 hover:scale-105 duration-300"
+          className="text-xl bg-white text-black rounded-xl px-4 py-2 hover:scale-105 duration-300"
         >
           login
         </Link>

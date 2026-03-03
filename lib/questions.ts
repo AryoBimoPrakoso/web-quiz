@@ -1,13 +1,5 @@
 import he from "he";
-export interface Question {
-  type: string;
-  difficulty: string;
-  category: string;
-  question: string;
-  options: string[];
-  correct_answer: string;
-  incorrect_answers: string[];
-}
+import { Question } from "@/types/Questions";
 
 function shufffle<T>(array: T[]): T[] {
   const copy = [...array];

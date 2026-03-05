@@ -8,6 +8,7 @@ export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const toggleShowPassword = () => {
@@ -16,19 +17,25 @@ export default function LoginForm() {
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
-    const res = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+    setLoading(true);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    const result = await res.json();
-    if (res.ok) {
-      alert("Login sukses!");
-      router.replace("/quiz");
-      console.log("Data user : ", result.user);
-    } else {
-      alert("Gagal : " + result.error);
+      const result = await res.json();
+      if (res.ok) {
+        router.replace("/quiz");
+        console.log("Data user : ", result.user);
+      } else {
+        alert("Gagal : " + result.error);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
     }
   };
 
@@ -62,9 +69,10 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="bg-blue-500 text-white mt-4 p-2 rounded"
+          disabled={isLoading}
+          className={`bg-blue-500 text-white mt-4 p-2 rounded ${isLoading ? "cursor-progress" : ""}`}
         >
-          Login
+          {isLoading ? "Loading..." : "Login"}
         </button>
       </form>
       <p>
